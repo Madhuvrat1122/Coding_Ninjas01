@@ -46,6 +46,9 @@ class QueueUsingDynamicArray {
                 newData[j] = data[i];
                 j++;
             }
+            // deallocate the old array memory
+            delete [] data;
+            data = newData;
             firstIndex = 0;
             nextIndex = capacity;
             capacity *= 2;
