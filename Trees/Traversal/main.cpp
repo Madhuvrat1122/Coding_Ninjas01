@@ -68,6 +68,9 @@ int main()
     cout<<"Post Order:- "<<endl;
     // print postOrder
     postOrder(root);
+
+    // delete Tree => this will call the destructor of TreeNode class
+    delete root;
     
     return 0;
 }
