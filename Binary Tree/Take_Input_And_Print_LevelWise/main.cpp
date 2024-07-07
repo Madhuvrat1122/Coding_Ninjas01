@@ -2,22 +2,27 @@
 #include "BinaryTreeNode.h"
 #include <queue>
 using namespace std;
-// print Tree Function
-void printTree(BinaryTreeNode<int>* root){
-    if(root == NULL){
-        return;
+// print Tree Level Wise
+void printTreeLevelWise(BinaryTreeNode<int>* root){
+    queue<BinaryTreeNode<int>*> pendingNodes;
+    pendingNodes.push(root);
+    while(!pendingNodes.empty()){
+        BinaryTreeNode<int>* front = pendingNodes.front();
+        pendingNodes.pop();
+        cout<<front->data<<":";
+        //print left child if exist
+        if(front->left){
+            cout<<"L:-"<<front->left->data<<",";
+            pendingNodes.push(front->left);
+        }
+        // print right child if exist
+        if(front->right){
+            cout<<"R:-"<<front->right->data;
+            pendingNodes.push(front->right);
+        }
+        cout<<endl;
     }
-    // print root data then left and right data if exist
-    cout<<root->data<<":";
-    if(root->left != NULL){
-        cout<<"L"<<root->left->data;
-    }
-    if(root->right != NULL){
-        cout<<"R"<<root->right->data;
-    }
-    cout<<endl;
-    printTree(root->left);
-    printTree(root->right);
+    
 }
 // Take Input Level Wise
 BinaryTreeNode<int>* takeInputLevelWise(){
