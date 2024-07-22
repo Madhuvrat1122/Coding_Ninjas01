@@ -18,6 +18,34 @@ bool isBST1(BinaryTreeNode<int>* root, int min = INT_MIN, int max = INT_MAX){
     
     return checkLeft && checkright;
 }
+// check BST - Apporach 2
+class BSTType {
+    public:
+        bool isBST;
+        int min;
+        int max;
+};
+BSTType isBST2(BinaryTreeNode<int>* root){
+    if(root == NULL){
+        BSTType ans;
+        ans.min = INT_MAX;
+        ans.max = INT_MIN;
+        ans.isBST = true;
+        return ans;
+    }
+    BSTType leftAns = isBST2(root->left);
+    BSTType rightAns = isBST2(root->right);
+    int minimum = min(root->data, min(leftAns.min, rightAns.min));
+    int maximum = max(root->data, max(leftAns.max, rightAns.max));
+    bool isBSTFINAL = ( leftAns.max < root->data ) && ( rightAns.min >= root->data ) && leftAns.isBST && rightAns.isBST;
+    
+    BSTType finalAns;
+    finalAns.min = minimum;
+    finalAns.max = maximum;
+    finalAns.isBST = isBSTFINAL;
+    return finalAns;
+    
+}
 // Take Input Level Wise
 BinaryTreeNode<int>* takeInputLevelWise(){
     // Taking Root Input
@@ -66,7 +94,9 @@ int main()
 {
     BinaryTreeNode<int>* root = takeInputLevelWise();
     
-    cout<<isBST1(root); // top to down apporach
+    cout<<isBST1(root)<<endl; // top to down apporach
+    
+    cout<<isBST2(root).isBST<<endl; // Apporach - 2
     
     delete root;
 
