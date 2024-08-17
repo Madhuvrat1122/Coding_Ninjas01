@@ -1,3 +1,4 @@
+
 #include "MapNode.h"
 /** 
  * Time Complexity:-
@@ -24,6 +25,35 @@ class Map {
         
         return hashCode % numBuckets; // compressing
     }
+    // Rehashing Function
+    void rehash(){
+        MapNode<V>** temp = buckets;
+        // Resizing the buckets
+        buckets = new MapNode<V>*[numBuckets*2];
+        int oldBucketSize = numBuckets;
+        numBuckets *= 2; // double the size of buckets to reduce the load factor
+        count = 0;    
+        for(int i=0; i<numBuckets; i++){
+            buckets[i] = NULL;
+        }
+        
+        // copy values to new buckets size
+        for(int i=0; i<oldBucketSize; i++){
+            MapNode<V>* head = temp[i];
+            while(head != NULL){
+                string key = head->key;
+                V value = head->value;
+                insert(key, value);
+                head = head->next;
+            }
+        }
+        
+        // delete the old buckets
+        for(int i=0; i<oldBucketSize; i++){
+            delete temp[i]; // recursively delete complete linked list at ith index
+        }
+        delete [] temp;
+    }
     public:
     // constructor
     Map(){
@@ -46,6 +76,10 @@ class Map {
     int size(){
         return count;
     }
+    // Load Factor
+    double loadFactor(){
+        return (1.0*count)/numBuckets;
+    }
     // Insert
     void insert(string key, V value){
         int bucketIndex = getBucketIndex(key);
@@ -63,6 +97,11 @@ class Map {
         newNode->next = head;
         buckets[bucketIndex] = newNode;
         count++;
+        // check for load factor
+        if(loadFactor() > 0.7){
+            // Rehashing
+            rehash();
+        }
         
     }
     // Search
