@@ -1,0 +1,118 @@
+(* Problem statement
+You are given a Binary Tree of type integer, a integer value of target node's data, and an integer value K.
+
+Print the data of all nodes that have a distance K from the target node. The order in which they would be printed will not matter.
+
+Example:
+For a given input tree(refer to the image below):
+1. Target Node: 5
+2. K = 2
+alt txt
+
+Starting from the target node 5, the nodes at distance K are 7 4 and 1.
+Detailed explanation ( Input/output format, Notes, Images )
+Constraints:
+1 <= N <= 10^5
+Where N is the total number of nodes in the binary tree.
+1 ≤ data of node ≤ 10^9
+1 ≤ target ≤ 10^9
+
+Time Limit: 1 sec
+Sample Input 1:
+5 6 10 2 3 -1 -1 -1 -1 -1 9 -1 -1
+3 1
+Sample Output 1:
+9
+6
+Sample Input 2:
+1 2 3 4 5 6 7 -1 -1 -1 -1 -1 -1 -1 -1
+3 3
+Sample Output 2:
+4
+5
+/*******************************************************
+Solution Video:-
+https://www.youtube.com/watch?v=i9ORlEy6EsI *) *)
+
+#include <unordered_map>
+#include <queue>
+BinaryTreeNode<int>* findTargetNode(BinaryTreeNode<int>* root, int node){
+        if(root == NULL){
+                return NULL;
+        }
+        else if (root->data == node){
+                return root;
+        }
+        BinaryTreeNode<int>* leftAns = findTargetNode(root->left, node);
+        BinaryTreeNode<int>* rightAns =  findTargetNode(root->right, node);
+
+        return leftAns ? leftAns : rightAns;
+}
+void parent_mapping(BinaryTreeNode<int>* root, unordered_map<BinaryTreeNode<int>*, BinaryTreeNode<int>*> &parent){
+        queue<BinaryTreeNode<int>*> q;
+        q.push(root);
+        while(!q.empty()){
+                BinaryTreeNode<int>* front = q.front();
+                q.pop();
+                if(front->left){
+                        parent[front->left] = front;
+                        parent_mapping(root->left, parent);
+                }
+                 if(front->right){
+                        parent[front->right] = front;
+                        parent_mapping(root->right, parent);
+                }
+        }
+}
+void nodesAtDistanceK(BinaryTreeNode<int> *root, int node, int k) {
+    BinaryTreeNode<int>* targetNode = findTargetNode(root, node);
+    // parent mapping
+    unordered_map<BinaryTreeNode<int>*, BinaryTreeNode<int>*> parent;
+    parent_mapping(root, parent);
+
+    // Traversing  in up, left and right direction for target node
+    unordered_map<BinaryTreeNode<int>*, bool> isVisited;
+    int cur_distance = 0;
+    queue<BinaryTreeNode<int>*> q;
+    q.push(targetNode);
+     isVisited[targetNode] = true;
+    while(!q.empty()){
+            int size = q.size();
+             if(cur_distance == k){
+                    break;
+            }
+            cur_distance++;
+
+            for(int i=0; i<size; i++){
+                BinaryTreeNode<int>* front = q.front();
+                q.pop();
+
+                // left side
+                if(front->left && !isVisited[front->left]){
+                        q.push(front->left);
+                        isVisited[front->left] = true;
+                }
+
+                // right side
+                if(front->right && !isVisited[front->right]){
+                        q.push(front->right);
+                        isVisited[front->right] = true;
+                }
+
+                // up side
+                if(parent[front] && !isVisited[parent[front]]){
+                        q.push(parent[front]);
+                        isVisited[parent[front]] = true;
+                }
+            }
+    }
+
+   // whatever left in queue is the answer
+    // print result
+    while(!q.empty()){
+            cout<<q.front()->data<<endl;
+            q.pop();
+    }
+
+}
+
