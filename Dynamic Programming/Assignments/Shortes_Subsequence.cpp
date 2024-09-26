@@ -1,3 +1,4 @@
+// *********************Din't understood completely may be will try later*******************************
 // Problem statement
 // Gary has two string S and V. Now, Gary wants to know the length shortest subsequence in S, which is not a subsequence in V.
 
