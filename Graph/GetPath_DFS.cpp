@@ -38,7 +38,7 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-// Using BFS Approach
+// Using DFS Approach
 vector<int> getPath_DFS(int **edges, int n, bool *visited, int sv, int ev){
     // Base case
     if(sv == ev){
