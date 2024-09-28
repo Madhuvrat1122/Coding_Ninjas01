@@ -14,7 +14,6 @@ void print(int n, int **edges, int sv){
     
     while(!pendingVertices.empty()){
         int currentVertex = pendingVertices.front(); // top vertex
-        visited[currentVertex] = true;
         pendingVertices.pop();
         cout<<currentVertex<<" "; // print the current vertex
         // now push the neighbours of current vectex in the queue
@@ -24,6 +23,7 @@ void print(int n, int **edges, int sv){
             // push the neighbour if not visited yet
             if(edges[currentVertex][i] == 1 && !visited[i]) {
                 pendingVertices.push(i);
+                 visited[i] = true;
             }
         }
     }
