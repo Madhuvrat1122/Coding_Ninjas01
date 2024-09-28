@@ -37,6 +37,7 @@ int main()
     for(int i=0; i<e; i++){
         cin>>s>>f;
         edges[s][f] = 1;
+        edges[f][s] = 1;
     }
     
     //DFS
